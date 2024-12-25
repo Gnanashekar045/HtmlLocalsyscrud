@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <div>
+            <label for="">Name</label>
+            <input type="text" id="name" placeholder="Type your name">
+        </div>
+
+        <div>
+            <p>Gender</p>
+            <input type="radio" name="gender" value="Male">
+            <label for="">Male</label>
+            
+            <input type="radio" name="gender" value="Female">
+            <label for="">Female</label>
+
+            <input type="radio" name="gender" value="Others"> 
+            <label for="">Others</label>
+        </div>
+
+        <div>
+            <p>Select subjects</p>
+
+            <input type="checkbox" name="subjects" value="Math">
+            <label for="">Math</label>
+
+            <input type="checkbox" name="subjects" value="Science">
+            <label for="">Science</label>
+
+            <input type="checkbox" name="subjects" value="English">
+            <label for="">English</label>
+        </div>
+
+        <div>
+            <p>Upload Project</p>
+            <input type="file" id="file" name="file" />
+        </div>
+    </form>
+    <button type="button" onclick="createUser()">Submit</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Subjects</th>
+                <th>File</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <script>
+        
+
+            const response = await fetch("http://localhost:3000/data");
+            const data = await response.json();
+            readUser(data);
+        }
+        
+        async function readUser(data) {
+            document.querySelector("tbody").innerHTML = "";
+            data.forEach((usr, i) => {
+                const tr = document.createElement("tr");
+
+                Object.keys(usr).forEach(key => {
+                    const td = document.createElement("td");
+                    td.innerHTML = usr[key];
+                    tr.appendChild(td);
+                });
+
+                const deltd = document.createElement("td");
+                const delbtn = document.createElement("button");
+                delbtn.innerText = "Delete";
+                delbtn.onclick = () => deleteUser(usr);
+                deltd.appendChild(delbtn);
+                tr.appendChild(deltd);
+
+                document.querySelector("tbody").appendChild(tr);
+            });
+        }
+
+        async function deleteUser(usr) {
+            await fetch("http://localhost:3000/data/" + usr.id, {
+                method: "DELETE"
+            });
+            const response = await fetch("http://localhost:3000/data");
+            const data = await response.json();
+            readUser(data);
+        }
+
+        window.onload = async function () {
+            const response = await fetch("http://localhost:3000/data");
+            const data = await response.json();
+            readUser(data);
+        };
+    </script>
+</body>
+</html>

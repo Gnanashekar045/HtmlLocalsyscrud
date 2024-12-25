@@ -1,78 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-  </head>
-  <body>
-    <div>
-      <label for="fname">First Name</label>
-      <input type="text" id="fname" name="fname" />
-    </div>
+</head>
+<body>
+    <form>
+        <div>
+            <label for="">Name</label>
+            <input type="text" id="name" placeholder="Type your name">
+        </div>
 
-    <div>
-      <p>Gender</p>
-      <input type="radio" name="gender" value="Male" id="gender-male" />
-      <label for="gender-male">Male</label>
+        <div>
+            <p>Gender</p>
+            <input type="radio" name="gender" value="Male">
+            <label for="">Male</label>
+            
+            <input type="radio" name="gender" value="Female">
+            <label for="">Female</label>
 
-      <input type="radio" name="gender" value="Female" id="gender-female" />
-      <label for="gender-female">Female</label>
+            <input type="radio" name="gender" value="Others"> 
+            <label for="">Others</label>
+        </div>
 
-      <input type="radio" name="gender" value="Others" id="gender-others" />
-      <label for="gender-others">Others</label>
-    </div>
+        <div>
+            <p>Select subjects</p>
 
-    <div>
-      <p>Select Subjects</p>
-      <input type="checkbox" name="subjects" value="Kannada" id="subjects-kannada" />
-      <label for="subjects-kannada">Kannada</label>
+            <input type="checkbox" name="subjusts" value="Math">
+            <label for="">Math</label>
 
-      <input type="checkbox" name="subjects" value="Science" id="subjects-science" />
-      <label for="subjects-science">Science</label>
+            <input type="checkbox" name="subjusts" value="Science">
+            <label for="">Science</label>
 
-      <input type="checkbox" name="subjects" value="English" id="subjects-english" />
-      <label for="subjects-english">English</label>
-    </div>
+            <input type="checkbox" name="subjusts" value="English">
+            <label for="">English</label>
+        </div>
 
-    <div>
-      <p>Upload Project</p>
-      <input type="file" id="file" name="file" />
-    </div>
+        <div>
+            <p>Select Country</p>
+            <select name="country" id="country">
+                <option value="USA">USA</option>
+                <option value="India">India</option>
+                <option value="UK">UK</option>
+                <option value="Australia">Australia</option>
+            </select>
+        </div>
 
-    <div>
-      <p>Email</p>
-      <input type="email" id="email" name="email" />
-    </div>
+        <div>
+            <label for="">Gmail</label>
+            <input type="email" id="gmail" placeholder="Enter your Gmail" />
+        </div>
 
-    <div>
-      <p>Feedback</p>
-      <textarea id="feedback" name="feedback"></textarea>
-    </div>
+        <div>
+            <label for="">Message</label>
+            <textarea id="message" placeholder="Enter your message"></textarea>
+        </div>
 
-    <div>
-      <p>Choose Country</p>
-      <select id="country" name="country">
-        <option value="India">India</option>
-        <option value="USA">USA</option>
-        <option value="Canada">Canada</option>
-        <option value="UK">UK</option>
-      </select>
-    </div>
-
-    <button  onclick="createUser()" id="creatbtn">Submit</button>
-    <button onclick="updateUser()" id="Updatebtn">Update</button>
-
+        <div>
+            <p>Upload Project</p>
+            <input type="file" id="file" name="file" />
+        </div>
+    </form>
+    <button type="button" onclick="createUser()">Submit</button>
     <table>
         <thead>
             <tr>
-                <th>Fname</th>
+                <th>Name</th>
                 <th>Gender</th>
                 <th>Subjects</th>
-                <th>file</th>
-                <th>Email</th>
-                <th>Feedback</th>
                 <th>Country</th>
+                <th>Gmail</th>
+                <th>Message</th>
+                <th>File</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -83,166 +83,68 @@
     </table>
 
     <script>
-      var users = JSON.parse(localStorage.getItem("users")) || [];
-      
-      function createUser() {
-        var user = {
-          fname: "",
-          gender: "",
-          subjects: "",
-          file: "",
-          email: "",
-          feedback: "",
-          country: ""
-        };
-
-        for (let a in user) {
-          if (a !== 'gender' && a !== 'subjects' && a !== 'file') {
-            user[a] = document.getElementById(a)?.value || '';
-          }
-        }
-
-        user.gender = document.querySelector('input[name="gender"]:checked')?.value;
-
-        user.subjects = Array.from(document.querySelectorAll('input[name="subjects"]:checked'))
-          .map(input => input.value);
-
-        user.file = document.getElementById("file").files[0]?.name;
-
-        users.push(user);
-        clearForm()
-        readUser()
-        localStorage.setItem("users", JSON.stringify(users));
-      }
-
-      function readUser() {
-        document.querySelector("tbody").innerHTML = "";
-        users.forEach((usr, i)=>{
-            var tr = document.createElement("tr");
-            for(a in usr) {
-                var td = document.createElement("td");
-                td.innerHTML = usr[a];
-                tr.appendChild(td)
+        async function createUser() {
+            var user = {
+                name: "",
+                message:"",
+                gmail:"",
+                country:""
             }
 
-            var deltd = document.createElement("td");
-            var delbtn = document.createElement("button");
-            delbtn.innerHTML = "Delete"
-            delbtn.setAttribute("onclick", "deleteUser("+i+")")
-            deltd.appendChild(delbtn)
-            tr.appendChild(deltd)
-
-            var edittd = document.createElement("td");
-            var editBtn = document.createElement("button")
-            editBtn.innerHTML = "Edit"
-            editBtn.setAttribute("onclick", "editUser("+i+")");
-            edittd.appendChild(editBtn);
-            tr.appendChild(edittd)
-
-
-            document.querySelector("tbody").appendChild(tr)
-        })
-      }
-
-      function editUser() {
-        index = i;
-        var userToBeEdit = users[i];
-        for (a in userToBeEdit) {
-            if (a !== 'gender' && a !== 'subjects' && a !== 'file') {
-                userToBeEdit[a] = document.getElementById(a).value
+            for(a in user) {
+                user[a] = document.getElementById(a)?.value || "";
             }
+
+            user.gender = document.querySelector('input[name="gender"]:checked')?.value || "";
+
+            user.subjusts = Array.from(document.querySelectorAll('input[name="subjusts"]:checked')).map(input => input.value);
+
+            user.file = document.getElementById("file").files[0]?.name || "";
+
+            await fetch("http://localhost:3000/data", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(user)
+            });
+            readUser();
         }
-      }
 
-      function deleteUser(i) {
-        users.splice(i, 1);
-        localStorage.setItem("users", JSON.stringify(users));
-        readUser()
-      }
+        async function readUser() {
+            const response = await fetch("http://localhost:3000/data");
+            const data = await response.json();
 
-      function editUser(i) {
-      index = i;
-      var userToBeEdit = users[i];
-  
-      for (let a in userToBeEdit) {
-        if (a !== "gender" && a !== "subjects" && a !== "file") {
-          document.getElementById(a).value = userToBeEdit[a] || "";
+            document.querySelector("tbody").innerHTML = "";  
+
+            data.forEach((usr, i) => {
+                var tr = document.createElement("tr");
+                for (a in usr) {
+                    var td = document.createElement("td");
+                    td.innerHTML = Array.isArray(usr[a]) ? usr[a].join(", ") : usr[a];
+                    tr.appendChild(td);
+                }
+                var deltd = document.createElement("td");
+                var delbtn = document.createElement("button");
+                delbtn.innerHTML = "Delete";
+                delbtn.setAttribute("onclick", `deleteUser(${usr})`);
+                deltd.appendChild(delbtn);
+                tr.appendChild(deltd);
+
+                document.querySelector("tbody").appendChild(tr);
+            });
         }
-      }
-  
-      if (userToBeEdit.gender) {
-        document.querySelector(`input[name="gender"][value="${userToBeEdit.gender}"]`).checked = true;
-      }
-  
-      document.querySelectorAll('input[name="subjects"]').forEach(checkbox => {
-        checkbox.checked = userToBeEdit.subjects.includes(checkbox.value);
-      });
 
-      document.getElementById("Updatebtn").style.display = "block"
-      document.getElementById("creatbtn").style.display = "none"
-  
-      // document.querySelector("button[onclick='createUser()']").innerHTML = "Update";
-      // document.querySelector("button[onclick='createUser()']").setAttribute("onclick", "updateUser()");
-    }
+    async function deleteUser(userId) {
+        await fetch(`http://localhost:3000/data/${usr.id}`, {
+        method: "DELETE"
+    });
 
-    function updateUser() {
-      var updatedUser = {
-        fname: "",
-        gender: "",
-        subjects: "",
-        file: "",
-        email: "",
-        feedback: "",
-        country: ""
-      };
-  
-      for (let a in updatedUser) {
-        if (a !== "gender" && a !== "subjects" && a !== "file") {
-          updatedUser[a] = document.getElementById(a)?.value || "";
-        }
-      }
-  
-      updatedUser.gender = document.querySelector('input[name="gender"]:checked')?.value;
-  
-      updatedUser.subjects = Array.from(document.querySelectorAll('input[name="subjects"]:checked'))
-        .map(input => input.value);
-  
-      updatedUser.file = users[index].file;
-  
-      users[index] = updatedUser;
-      localStorage.setItem("users", JSON.stringify(users));
-      readUser();
-
-      document.getElementById("Updatebtn").style.display = "none"
-      document.getElementById("creatbtn").style.display = "block"
-  
-      // document.querySelector("button[onclick='updateUser()']").innerHTML = "Submit";
-      // document.querySelector("button[onclick='updateUser()']").setAttribute("onclick", "createUser()");
-    }
-
-  function clearForm() {
-  var user = {
-    fname: "",
-    gender: "",
-    subjects: "",
-    file: "",
-    email: "",
-    feedback: "",
-    country: ""
-  };
-
-  for (let a in user) {
-    if (a !== 'gender' && a !== 'subjects' && a !== 'file') {
-      document.getElementById(a).value = ""; 
-    }
-  }
-
-  document.querySelectorAll('input[name="gender"]').forEach(input => input.checked = false);
-  document.querySelectorAll('input[name="subjects"]').forEach(input => input.checked = false);
-  document.getElementById('file').value = ""; 
+    // Reload data after deletion
+    readUser();
 }
 
-readUser()
-   </script>
-  </body>
+
+
+        window.onload = readUser;
+    </script>
+</body>
 </html>
