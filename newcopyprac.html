@@ -1,0 +1,144 @@
+<script>
+    var users = JSON.parse(localStorage.getItem("users")) || [];
+    var index = null;
+  
+    function createUser() {
+      var user = {
+        fname: "",
+        gender: "",
+        subjects: "",
+        file: "",
+        email: "",
+        feedback: "",
+        country: ""
+      };
+  
+      for (let a in user) {
+        if (a !== "gender" && a !== "subjects" && a !== "file") {
+          user[a] = document.getElementById(a)?.value || "";
+        }
+      }
+  
+      user.gender = document.querySelector('input[name="gender"]:checked')?.value;
+  
+      user.subjects = Array.from(document.querySelectorAll('input[name="subjects"]:checked'))
+        .map(input => input.value);
+  
+      user.file = document.getElementById("file").files[0]?.name;
+  
+      if (!user.fname || !user.gender || !user.email || !user.country) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+  
+      users.push(user);
+      localStorage.setItem("users", JSON.stringify(users));
+      readUser();
+  
+      alert("User created successfully!");
+    }
+  
+    function readUser() {
+      document.querySelector("tbody").innerHTML = "";
+      users.forEach((usr, i) => {
+        var tr = document.createElement("tr");
+        for (a in usr) {
+          var td = document.createElement("td");
+          td.innerHTML = Array.isArray(usr[a]) ? usr[a].join(", ") : usr[a]; // Join array values for display
+          tr.appendChild(td);
+        }
+  
+        var editTd = document.createElement("td");
+        var editBtn = document.createElement("button");
+        editBtn.innerHTML = "Edit";
+        editBtn.setAttribute("onclick", "editUser(" + i + ")");
+        editTd.appendChild(editBtn);
+        tr.appendChild(editTd);
+  
+        var delTd = document.createElement("td");
+        var delBtn = document.createElement("button");
+        delBtn.innerHTML = "Delete";
+        delBtn.setAttribute("onclick", "deleteUser(" + i + ")");
+        delTd.appendChild(delBtn);
+        tr.appendChild(delTd);
+  
+        document.querySelector("tbody").appendChild(tr);
+      });
+    }
+  
+    function editUser(i) {
+      index = i;
+      var userToBeEdit = users[i];
+  
+      for (let a in userToBeEdit) {
+        if (a !== "gender" && a !== "subjects" && a !== "file") {
+          document.getElementById(a).value = userToBeEdit[a] || "";
+        }
+      }
+  
+      // Set the gender radio button
+      if (userToBeEdit.gender) {
+        document.querySelector(`input[name="gender"][value="${userToBeEdit.gender}"]`).checked = true;
+      }
+  
+      // Set the subjects checkboxes
+      document.querySelectorAll('input[name="subjects"]').forEach(checkbox => {
+        checkbox.checked = userToBeEdit.subjects.includes(checkbox.value);
+      });
+  
+      // No need to set file input as it can't be prefilled
+  
+      // Update button behavior
+      document.querySelector("button[onclick='createUser()']").innerHTML = "Update";
+      document.querySelector("button[onclick='createUser()']").setAttribute("onclick", "updateUser()");
+    }
+  
+    function updateUser() {
+      var updatedUser = {
+        fname: "",
+        gender: "",
+        subjects: "",
+        file: "",
+        email: "",
+        feedback: "",
+        country: ""
+      };
+  
+      for (let a in updatedUser) {
+        if (a !== "gender" && a !== "subjects" && a !== "file") {
+          updatedUser[a] = document.getElementById(a)?.value || "";
+        }
+      }
+  
+      updatedUser.gender = document.querySelector('input[name="gender"]:checked')?.value;
+  
+      updatedUser.subjects = Array.from(document.querySelectorAll('input[name="subjects"]:checked'))
+        .map(input => input.value);
+  
+      updatedUser.file = users[index].file; // Keep the old file as it can't be updated directly
+  
+      if (!updatedUser.fname || !updatedUser.gender || !updatedUser.email || !updatedUser.country) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+  
+      users[index] = updatedUser;
+      localStorage.setItem("users", JSON.stringify(users));
+      readUser();
+  
+      // Reset the form and button
+      document.querySelector("button[onclick='updateUser()']").innerHTML = "Submit";
+      document.querySelector("button[onclick='updateUser()']").setAttribute("onclick", "createUser()");
+  
+      alert("User updated successfully!");
+    }
+  
+    function deleteUser(i) {
+      users.splice(i, 1);
+      localStorage.setItem("users", JSON.stringify(users));
+      readUser();
+    }
+  
+    readUser();
+  </script>
+  

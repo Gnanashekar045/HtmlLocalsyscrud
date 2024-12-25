@@ -1,0 +1,109 @@
+<script>
+    let allUsers = JSON.parse(localStorage.getItem('users')) || [];
+    let editingIndex = null;
+  
+    const userForm = document.getElementById('userForm');
+    const userTableBody = document.getElementById('userTable').querySelector('tbody');
+    const submitBtn = document.getElementById('submitBtn');
+    const updateBtn = document.getElementById('updateBtn');
+  
+    function handleChange(event) {
+      const { name, type, value, checked, files } = event.target;
+  
+      if (type === 'checkbox') {
+        const checkboxes = document.querySelectorAll(`input[name="${name}"]`);
+        return Array.from(checkboxes)
+          .filter((checkbox) => checkbox.checked)
+          .map((checkbox) => checkbox.value);
+      } else if (type === 'file') {
+        return files[0]?.name || '';
+      } else if (type === 'radio') {
+        return checked ? value : '';
+      }
+      return value;
+    }
+  
+    function renderTable() {
+      userTableBody.innerHTML = '';
+      allUsers.forEach((user, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${user.firstName}</td>
+          <td>${user.lastName}</td>
+          <td>${user.gender}</td>
+          <td>${user.subjects.join(', ')}</td>
+          <td>${user.opinion}</td>
+          <td>${user.documents}</td>
+          <td>${user.date}</td>
+          <td>${user.gmail}</td>
+          <td>${user.feedback}</td>
+          <td>
+            <button onclick="editUser(${index})">Edit</button>
+            <button onclick="deleteUser(${index})">Delete</button>
+          </td>
+        `;
+        userTableBody.appendChild(row);
+      });
+    }
+  
+    function clearForm() {
+      userForm.reset();
+      editingIndex = null;
+      submitBtn.style.display = 'inline';
+      updateBtn.style.display = 'none';
+    }
+  
+    function saveToLocalStorage() {
+      localStorage.setItem('users', JSON.stringify(allUsers));
+    }
+  
+    submitBtn.addEventListener('click', () => {
+      const formData = new FormData(userForm);
+      const user = Object.fromEntries(formData.entries());
+      user.subjects = handleChange({ target: userForm.subjects });
+      allUsers.push(user);
+      saveToLocalStorage();
+      renderTable();
+      clearForm();
+    });
+  
+    updateBtn.addEventListener('click', () => {
+      const formData = new FormData(userForm);
+      const user = Object.fromEntries(formData.entries());
+      user.subjects = handleChange({ target: userForm.subjects });
+      allUsers[editingIndex] = user;
+      saveToLocalStorage();
+      renderTable();
+      clearForm();
+    });
+  
+    function editUser(index) {
+      const user = allUsers[index];
+      Object.keys(user).forEach((key) => {
+        const input = userForm.elements[key];
+        if (input) {
+          if (input.type === 'checkbox') {
+            Array.from(userForm.elements[key]).forEach((checkbox) => {
+              checkbox.checked = user[key].includes(checkbox.value);
+            });
+          } else if (input.type === 'radio') {
+            input.checked = user[key] === input.value;
+          } else {
+            input.value = user[key];
+          }
+        }
+      });
+      editingIndex = index;
+      submitBtn.style.display = 'none';
+      updateBtn.style.display = 'inline';
+    }
+  
+    function deleteUser(index) {
+      allUsers.splice(index, 1);
+      saveToLocalStorage();
+      renderTable();
+    }
+  
+    renderTable();
+  </script>
+  
