@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Table</title>
+</head>
+<body>
+    <h1>Enter a Number</h1>
+    <input type="text" id="string" placeholder="Enter a number">
+    <button type="button" onclick="handleInput()">Generate Table</button>
+    <p id="results"></p>
+
+    <script>
+        // Function to generate multiplication table
+        function generateTable(number) {
+            let table = "";
+            for (let i = 1; i <= 10; i++) {
+                table += `${number} x ${i} = ${number * i}<br>`;
+            }
+            return table;
+        }
+
+        // Main function to handle input
+        function handleInput() {
+            const input = document.getElementById("string").value;
+            const results = document.getElementById("results");
+
+            if (!isNaN(input) && input.trim() !== "") {
+                // Input is a valid number
+                const number = parseInt(input, 10);
+                results.innerHTML = `<h2>Multiplication Table for ${number}</h2>` + generateTable(number);
+            } else {
+                results.innerHTML = "Please enter a valid number.";
+            }
+        }
+    </script>
+</body>
+</html>
