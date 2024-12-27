@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Input Handling</title>
+  </head>
+  <body>
+    <form>
+      <div>
+        <label for="">Name</label>
+        <input type="text" id="name" placeholder="Type your name" />
+      </div>
+
+      <label for="">lastname</label>
+        <input type="text" id="lname" placeholder="Type your name" />
+      </div>
+
+      <div>
+        <p>Gender</p>
+        <input type="radio" name="gender" value="Male" />
+        <label for="">Male</label>
+
+        <input type="radio" name="gender" value="Female" />
+        <label for="">Female</label>
+
+        <input type="radio" name="gender" value="Others" />
+        <label for="">Others</label>
+      </div>
+
+      <div>
+        <p>Preferences</p>
+        <input type="radio" name="preferences" value="Yes" />
+        <label for="">Yes</label>
+
+        <input type="radio" name="preferences" value="No" />
+        <label for="">No</label>
+      </div>
+
+      <div>
+        <p>Select subjects</p>
+        <input type="checkbox" name="subjects" value="Math" />
+        <label for="">Math</label>
+
+        <input type="checkbox" name="subjects" value="Science" />
+        <label for="">Science</label>
+
+        <input type="checkbox" name="subjects" value="English" />
+        <label for="">English</label>
+      </div>
+
+      <div>
+        <p>Select hobbies</p>
+        <input type="checkbox" name="hobbies" value="Reading" />
+        <label for="">Reading</label>
+
+        <input type="checkbox" name="hobbies" value="Gaming" />
+        <label for="">Gaming</label>
+
+        <input type="checkbox" name="hobbies" value="Sports" />
+        <label for="">Sports</label>
+      </div>
+
+      <div>
+        <p>Select Country</p>
+        <select name="country" id="country">
+          <option value="USA">USA</option>
+          <option value="India">India</option>
+          <option value="UK">UK</option>
+          <option value="Australia">Australia</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="">Gmail</label>
+        <input type="email" id="gmail" placeholder="Enter your Gmail" />
+      </div>
+
+      <div>
+        <label for="">Message</label>
+        <textarea id="message" placeholder="Enter your message"></textarea>
+      </div>
+
+      <div>
+        <p>Upload Project</p>
+        <input type="file" id="file" name="file" />
+      </div>
+    </form>
+    <button type="button" onclick="createUser()">Submit</button>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Preferences</th>
+          <th>Subjects</th>
+          <th>Hobbies</th>
+          <th>Country</th>
+          <th>Gmail</th>
+          <th>Message</th>
+          <th>File</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <script>
+     function createUser () {
+        var user = {
+            name:"",
+            lname:"",
+            country:"",
+            gmail:"",
+            message:"",
+        }
+
+
+     }
+    </script>
+  </body>
+</html>
