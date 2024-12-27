@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="button">
+      <button onclick="showtoating(successmsg)">SuccessMsg</button>
+      <button onclick="showtoating(errormsg)">ErrorMsg</button>
+      <button onclick="showtoating(invalidmsg)">InvalidMsg</button>
+    </div>
+
+    <div id="tostbox"></div>
+
+    <script>
+      let toastBox = document.getElementById("tostbox");
+      let successmsg = "Successfully Updated";
+      let errormsg = "Please fix the error";
+      let invalidmsg = "Check invalid and fix the error";
+
+      function showtoating(mag) {
+        let toast = document.createElement("div");
+        toast.classList.add("toast");
+        toast.innerHTML = mag;
+        toastBox.appendChild(toast);
+
+        setTimeout(() => {
+          toast.remove(); 
+        }, 6000);
+      }
+    </script>
+  </body>
+</html>

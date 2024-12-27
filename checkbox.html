@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Dynamic Input Handling</title>
   </head>
   <body>
     <form>
@@ -25,16 +25,36 @@
       </div>
 
       <div>
-        <p>Select subjects</p>
+        <p>Preferences</p>
+        <input type="radio" name="preferences" value="Yes" />
+        <label for="">Yes</label>
 
-        <input type="checkbox" name="subjusts" value="Math" />
+        <input type="radio" name="preferences" value="No" />
+        <label for="">No</label>
+      </div>
+
+      <div>
+        <p>Select subjects</p>
+        <input type="checkbox" name="subjects" value="Math" />
         <label for="">Math</label>
 
-        <input type="checkbox" name="subjusts" value="Science" />
+        <input type="checkbox" name="subjects" value="Science" />
         <label for="">Science</label>
 
-        <input type="checkbox" name="subjusts" value="English" />
+        <input type="checkbox" name="subjects" value="English" />
         <label for="">English</label>
+      </div>
+
+      <div>
+        <p>Select hobbies</p>
+        <input type="checkbox" name="hobbies" value="Reading" />
+        <label for="">Reading</label>
+
+        <input type="checkbox" name="hobbies" value="Gaming" />
+        <label for="">Gaming</label>
+
+        <input type="checkbox" name="hobbies" value="Sports" />
+        <label for="">Sports</label>
       </div>
 
       <div>
@@ -68,7 +88,9 @@
         <tr>
           <th>Name</th>
           <th>Gender</th>
+          <th>Preferences</th>
           <th>Subjects</th>
+          <th>Hobbies</th>
           <th>Country</th>
           <th>Gmail</th>
           <th>Message</th>
@@ -89,15 +111,28 @@
           country: "",
         };
 
-        for (a in user) {
-          user[a] = document.getElementById(a)?.value || "";
+        // Fill text, select, and file inputs
+        for (let key in user) {
+          user[key] = document.getElementById(key)?.value || "";
         }
-
-        user.gender = document.querySelector('input[name="gender"]:checked')?.value || "";
-
-        user.subjusts = Array.from(document.querySelectorAll('input[name="subjusts"]:checked')).map((input) => input.value);
-
         user.file = document.getElementById("file").files[0]?.name || "";
+
+        // Dynamically group checkbox values
+        const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'));
+        checkboxes.forEach((checkbox) => {
+          const key = checkbox.name;
+          if (!user[key]) {
+            user[key] = [];
+          }
+          user[key].push(checkbox.value);
+        });
+
+        // Dynamically group radio button values
+        const radioButtons = Array.from(document.querySelectorAll('input[type="radio"]:checked'));
+        radioButtons.forEach((radio) => {
+          const key = radio.name;
+          user[key] = radio.value; // Only one value for each radio group
+        });
 
         await fetch("http://localhost:3000/data", {
           method: "POST",
@@ -127,7 +162,7 @@
           var deltd = document.createElement("td");
           var delbtn = document.createElement("button");
           delbtn.innerHTML = "Delete";
-          delbtn.setAttribute("onclick", `deleteUser(${usr.id})`); // Ensure correct ID
+          delbtn.setAttribute("onclick", `deleteUser(${usr.id})`);
           deltd.appendChild(delbtn);
           tr.appendChild(deltd);
 
@@ -139,8 +174,6 @@
         await fetch(`http://localhost:3000/data/${userId}`, {
           method: "DELETE",
         });
-
-        // Reload data after deletion
         readUser();
       }
 
