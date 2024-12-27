@@ -108,6 +108,13 @@
     </table>
 
     <script>
+      var radioButtons = document.querySelectorAll(
+        'input[type="radio"]:checked'
+      );
+      var checkboxes = Array.from(
+        document.querySelectorAll('input[type="checkbox"]:checked')
+      );
+      var fileInput = document.getElementById("file");
       function createUser() {
         var user = {
           name: "",
@@ -124,7 +131,7 @@
         }
 
         // Get selected radio buttons for gender and preferences
-        const radioButtons = document.querySelectorAll('input[type="radio"]:checked');
+
         radioButtons.forEach((radioBtn) => {
           const key = radioBtn.name;
           if (!user[key]) {
@@ -133,7 +140,7 @@
         });
 
         // Get selected checkboxes for subjects and hobbies
-        const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'));
+
         checkboxes.forEach((checkbox) => {
           const key = checkbox.name;
           if (!user[key]) {
@@ -143,7 +150,7 @@
         });
 
         // Correct single file handling
-        const fileInput = document.getElementById("file");
+
         user.file = fileInput.files[0]?.name || ""; // Handle single file input
 
         console.log(user);
